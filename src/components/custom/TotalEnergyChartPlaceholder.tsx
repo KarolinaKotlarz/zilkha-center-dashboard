@@ -1,5 +1,5 @@
 "use client"
-import { AreaChart } from '@/components/areaChart';
+import { AreaChart } from '@/components/AreaChart';
 
 const chartdata = [
   {
