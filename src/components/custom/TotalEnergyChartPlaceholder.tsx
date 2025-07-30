@@ -70,7 +70,11 @@ const valueFormatter = function (number: number | bigint) {
 
 export function AreaChartHero() {
   return (
-      <AreaChart
+    <>
+    <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Newsletter Revenue</h3>
+      <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">$34,567</p>
+      
+    <AreaChart
         className="mt-4 h-72"
         data={chartdata}
         index="date"
@@ -79,6 +83,8 @@ export function AreaChartHero() {
         colors={['cyan', 'violet']}
         valueFormatter={valueFormatter}
       />
+    </>
+      
     
   );
 }

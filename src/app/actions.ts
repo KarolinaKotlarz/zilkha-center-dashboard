@@ -1,0 +1,74 @@
+import { md5 } from "js-md5";
+import { USER, PASS } from "@/app/login"
+import { sensors } from "@/app/data/sensors";
+
+// Gets the JSON Web Token (JWT) for authentication purposes,
+// following eGauge Web API instructions
+async function getAuthToken(deviceNumber: string) {
+    const URL = `https://egauge${deviceNumber}.d.egauge.net/api`
+    // Get the 'unauthorized' response
+    const unauthorized_data = await fetch(`${URL}/auth/unauthorized`);
+    const unauthorized_data_json = await unauthorized_data.json();
+
+    // Get the realm and server nonce (valid for 1 min)
+    const realm = unauthorized_data_json.rlm;
+    const nnc = unauthorized_data_json.nnc;
+
+    // Generate the client nonce
+    const { randomBytes } = require('crypto');
+    const cnnc = randomBytes(64).toString('hex');
+
+    // Hash login info
+    const ha1_content = `${USER}:${realm}:${PASS}`;
+    const ha1 = md5(ha1_content); // must be MD5 hash as per eGauge docs
+    const hash_content = `${ha1}:${nnc}:${cnnc}`;
+    const hash = md5(hash_content);
+
+    // Payload for auth request
+    const payload = {
+        rlm: realm,
+        usr: USER,
+        nnc: nnc,
+        cnnc: cnnc,
+        hash: hash
+    }
+
+    // Try to log in
+    const response = await fetch(`${URL}/auth/login`, {
+    method: "POST",
+    body: JSON.stringify(payload)
+    }).then((response) => response.json());
+
+    // Return response
+    return response.jwt;
+}
+
+// Builds a dictionary of all JWTs and corresponding url numbers
+export async function getFullAuthTokenDict() {
+    let tokens = new Map();
+    
+    for (let i = 0; i < sensors.length; i++) {
+        const token = await getAuthToken(sensors[i].number.toString());
+        tokens.set(sensors[i].number, token);
+    }
+
+    return tokens;
+}
+
+// Extracts all registers from a particular URL
+// Takes in the device number for the URL and its auth token
+export async function extractRegisters(deviceNumber: string, JWT: string) {
+    const URL = `https://egauge${deviceNumber}.d.egauge.net/api`
+
+    const bearer = 'Bearer ' + JWT;
+
+    const sensors = await fetch(`${URL}/register`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Authorization': bearer,
+    },
+    }).then((r) => r.json());
+
+    return sensors.registers;
+}
