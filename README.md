@@ -1,8 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Overview
 
-## Getting Started
-
-First, run the development server:
+To run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +12,17 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Dev server is configured to use a self-signed certificate for https (as opposed to the default of http). To change that, remove the flag "--experimental-https" from package.json.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Organization
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The api folder has routes that extract data from the eGauge API (to avoid issues with client/server components and CORS). There might be a better way to handle these issues.
 
-## Learn More
+The data folder contains info about the sensors for constructing API URLs.
 
-To learn more about Next.js, take a look at the following resources:
+actions.ts contains functions that work with the eGauge API directly, to be imported in other places. actions.ts imports username and password for authentication purposes from a login.ts file, which is not committed to git for security reasons.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The components folder contains the custom folder, which has components made for this project, usually based on the imported components found in the components folder.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The lib folder contains helper files for Tremor Charts.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
