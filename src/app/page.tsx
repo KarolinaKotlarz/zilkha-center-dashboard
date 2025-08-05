@@ -5,6 +5,7 @@ import DeviceList from "@/components/custom/DeviceList";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ExplanationCard } from "@/components/custom/ExplanationCard";
 import { DeviceChart } from "@/components/custom/DevicesChartPlaceholder";
+import { DayTotalsChart } from "@/components/custom/DayTotalsChart";
 
 export default function Home() {
   return (
@@ -24,7 +25,8 @@ export default function Home() {
           </section>
           <section className="my-8 grid grid-cols-3 gap-18">
             <div className="col-span-2">
-              <DayChart/>
+              {/* <DayChart/> */}
+              <DayTotalsChart/>
             </div>
             <div className="flex flex-col">
               <ProgressBar className="flex-1" value={63} label="63%"/>
