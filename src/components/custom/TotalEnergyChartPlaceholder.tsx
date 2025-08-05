@@ -1,86 +1,86 @@
 "use client"
 import { AreaChart } from '@/components/AreaChart';
 
-const chartdata = [
+const data = [
   {
-    date: 'Jan 22',
-    SolarPanels: 2890,
-    'Inverters': 2338,
+    hour: '01:00',
+    Today: 1000,
+    Yesterday: 1200
   },
   {
-    date: 'Feb 22',
-    SolarPanels: 2756,
-    'Inverters': 2103,
+    hour: '03:00',
+    Today: 900,
+    Yesterday: 800
   },
   {
-    date: 'Mar 22',
-    SolarPanels: 3322,
-    'Inverters': 2194,
+    hour: '05:00',
+    Today: 1000,
+    Yesterday: 900
   },
   {
-    date: 'Apr 22',
-    SolarPanels: 3470,
-    'Inverters': 2108,
+    hour: '07:00',
+    Today: 900,
+    Yesterday: 1000
   },
   {
-    date: 'May 22',
-    SolarPanels: 3475,
-    'Inverters': 1812,
+    hour: '09:00',
+    Today: 1300,
+    Yesterday: 1200
   },
   {
-    date: 'Jun 22',
-    SolarPanels: 3129,
-    'Inverters': 1726,
+    hour: '11:00',
+    Today: 1000,
+    Yesterday: 1200
   },
   {
-    date: 'Jul 22',
-    SolarPanels: 3490,
-    'Inverters': 1982,
+    hour: '13:00',
+    Today: 1500,
+    Yesterday: 1400
   },
   {
-    date: 'Aug 22',
-    SolarPanels: 2903,
-    'Inverters': 2012,
+    hour: '15:00',
+    Today: 1000,
+    Yesterday: 700
   },
   {
-    date: 'Sep 22',
-    SolarPanels: 2643,
-    'Inverters': 2342,
+    hour: '17:00',
+    Today: 900,
+    Yesterday: 1000
   },
   {
-    date: 'Oct 22',
-    SolarPanels: 2837,
-    'Inverters': null,
+    hour: '19:00',
+    Today: null,
+    Yesterday: 1200
   },
   {
-    date: 'Nov 22',
-    SolarPanels: 2954,
-    'Inverters': null,
+    hour: '21:00',
+    Today: null,
+    Yesterday: 900
   },
   {
-    date: 'Dec 22',
-    SolarPanels: 3239,
-    'Inverters': null,
+    hour: '23:00',
+    Today: null,
+    Yesterday: 700
   },
-];
+
+]
 
 const valueFormatter = function (number: number | bigint) {
-  return '$ ' + new Intl.NumberFormat('us').format(number).toString();
+  return new Intl.NumberFormat('us').format(number).toString() + ' W';
 };
 
-export function AreaChartHero() {
+export function DayChart() {
   return (
     <>
-    <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Newsletter Revenue</h3>
-      <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">$34,567</p>
-      
+    <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Today's Energy Use</h3>
+    <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold"></p>
     <AreaChart
         className="mt-4 h-72"
-        data={chartdata}
-        index="date"
+        data={data}
+        index="hour"
         yAxisWidth={65}
-        categories={['SolarPanels', 'Inverters']}
-        colors={['cyan', 'violet']}
+        categories={['Today', 'Yesterday']}
+        colors={['violet', 'cyan']}
         valueFormatter={valueFormatter}
       />
     </>

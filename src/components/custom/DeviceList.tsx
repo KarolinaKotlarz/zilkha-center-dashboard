@@ -18,8 +18,8 @@ export default async function DeviceList() {
             <ul className="ms-1 flex flex-col gap-3">
                 {JSON.parse(devices).map((device: any) => {
                     return <li className="flex items-center justify-start gap-2">
-                            <Checkbox id="r1" onCheckedChange={() => {}} defaultChecked={true}/>
-                            <Label htmlFor="r1">{device.name}</Label>
+                            <Checkbox id="r2" onCheckedChange={() => {}} defaultChecked={false}/>
+                            <Label htmlFor="r2">{device.name}</Label>
                         </li>
                     }
                 )}
