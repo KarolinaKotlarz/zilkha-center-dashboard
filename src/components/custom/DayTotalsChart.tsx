@@ -12,10 +12,10 @@ export function DayTotalsChart() {
 
     useEffect(() => {
         async function getData() {
-            const res = await fetch('/api/totals-yesterday', new Request(''));
+            const res = await fetch('/api/hourly-totals', new Request(''));
             const data = await res.json();
             setData(data);
-            const cumulativeSum = data.map((val: {hour: string, Yesterday: number}) => {return val.Yesterday}).reduce((partialSum: number, val: number) => partialSum + (val * 3600), 0)
+            const cumulativeSum = data.map((val: {time: string, power: number}) => {return val.power}).reduce((partialSum: number, val: number) => partialSum + (val * 3600), 0)
             setSum(cumulativeSum);
         }
         getData();
@@ -31,8 +31,8 @@ export function DayTotalsChart() {
         data={data}
         index="time"
         yAxisWidth={65}
-        categories={['Yesterday']}
-        colors={['cyan']}
+        categories={['Today', 'Yesterday']}
+        colors={['violet', 'cyan']}
         valueFormatter={valueFormatter}
       />
     </>

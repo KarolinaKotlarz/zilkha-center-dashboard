@@ -73,13 +73,13 @@ export async function extractRegisters(deviceNumber: string, JWT: string) {
     return sensors.registers;
 }
 
+// Gets yesterday's total instantaneous energy rates per hour for each URL
 export async function getYesterdaysEnergyTotals(deviceNumber: string, JWT: string) {
-    
-
     const URL = `https://egauge${deviceNumber}.d.egauge.net/api`
     const bearer = 'Bearer ' + JWT;
 
-    const response = await fetch(`${URL}/register?reg=all&time=sod(now-1d)+1h:1h:sod(now)&delta=true`, {
+    // Start time is start of day yesterday, step by 1h, end time is start of current hour
+    const response = await fetch(`${URL}/register?reg=all&time=sod(now-1d):1h:soh(now)&delta=true`, {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -87,25 +87,9 @@ export async function getYesterdaysEnergyTotals(deviceNumber: string, JWT: strin
     },
     }).then((r) => r.json());
 
-    //console.log(response.ranges[0].rows);
-    const x = convertPowerRanges(response.ranges);
-    //console.log(x);
+    const res = convertPowerRanges(response.ranges);
 
-    return x;
-
-    return [
-        {
-        hour: '01:00',
-        Yesterday: 1200
-    },
-    {
-        hour: '03:00',
-        Yesterday: 800
-    },
-    {
-        hour: '05:00',
-        Yesterday: 900
-    }];
+    return res;
 }
 
 // Converts power ranges into data that can be plugged into a chart
@@ -120,7 +104,7 @@ export function convertPowerRanges(ranges: Array<any>) : Array<any> {
     timestamp = timestamp - ranges[0].delta; // Account for the delta between timestamps
     const power = item.map((val: number) => {return Math.round(val / ranges[0].delta)}).reduce((partialSum: number, val: number) => partialSum + val, 0); // Get the instantaneous val from avg
     const date = new Date(timestamp * 1000); // Convert timestamp into date
-    list.push({time: date.toLocaleTimeString("en-US"), Yesterday: power});
+    list.push({time: date.toLocaleTimeString("en-US"), power: power});
   }
   
   // The API values are from youngest to oldest, so we reverse the list
