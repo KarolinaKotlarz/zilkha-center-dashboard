@@ -1,11 +1,10 @@
 "use client"
 import React, { Suspense, useState } from "react"
-import { DayChart } from "@/components/custom/TotalEnergyChartPlaceholder";
 import DeviceList from "@/components/custom/DeviceList";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ExplanationCard } from "@/components/custom/ExplanationCard";
-import { DeviceChart } from "@/components/custom/DevicesChartPlaceholder";
 import { DayTotalsChart } from "@/components/custom/DayTotalsChart";
+import { DevicesChart } from "@/components/custom/DevicesChart";
 
 export default function Home() {
   return (
@@ -14,7 +13,7 @@ export default function Home() {
           <span className="p-3 text-sx font-semibold text-gray-900">Sensors Available:</span>
         <div className="">
           <Suspense fallback={<div>Loading registers...</div>} >
-              <DeviceList/>
+              {/* <DeviceList/> */}
             </Suspense>
       </div>
       </aside>
@@ -25,15 +24,14 @@ export default function Home() {
           </section>
           <section className="my-8 grid grid-cols-3 gap-18">
             <div className="col-span-2">
-              {/* <DayChart/> */}
-              <DayTotalsChart/>
+              {/* <DayTotalsChart/> */}
             </div>
             <div className="flex flex-col">
               <ProgressBar className="flex-1" value={63} label="63%"/>
               <ExplanationCard/>
             </div>
             <div className="col-span-3">
-              <DeviceChart/>
+              <DevicesChart/>
             </div>
           </section>
         </div>

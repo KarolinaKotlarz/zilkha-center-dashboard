@@ -4,7 +4,7 @@ import { sensors } from "@/app/data/sensors";
 
 // Gets the JSON Web Token (JWT) for authentication purposes,
 // following eGauge Web API instructions
-async function getAuthToken(deviceNumber: string) {
+export async function getAuthToken(deviceNumber: string) {
     const URL = `https://egauge${deviceNumber}.d.egauge.net/api`
     // Get the 'unauthorized' response
     const unauthorized_data = await fetch(`${URL}/auth/unauthorized`);
@@ -73,6 +73,45 @@ export async function extractRegisters(deviceNumber: string, JWT: string) {
     return sensors.registers;
 }
 
+export async function getDeviceData(deviceNumber: string, JWT: string) {
+    const URL = `https://egauge${deviceNumber}.d.egauge.net/api`
+    const bearer = 'Bearer ' + JWT;
+
+    // Start time is start of day yesterday, step by 1h, end time is start of current hour
+    const time = 'sod(now):1h:soh(now)'
+
+    const response = await fetch(`${URL}/register?reg=all&time=${time}&delta=true`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Authorization': bearer,
+    },
+    }).then((r) => r.json());
+
+    const names = response.registers.map((val: any) => {return val.name})
+    const ranges = convertPowerRanges(response.ranges);
+
+    return {names: names, ranges: ranges};
+}
+
+// Converts power ranges into data that can be plugged into a chart, without summing
+// Takes the ranges array from a sensor response, returns array of time-power objects, where power could be an array
+export function convertPowerRanges(ranges: Array<any>) : Array<any> {
+  const list = [];
+  var timestamp = ranges[0].ts // Get the start timestamp
+  const d = new Date(timestamp * 1000);
+
+  for (const item of ranges[0].rows.slice(1)) { // Slicing skips first value, where time isn't a delta and power isn't instantaneous
+    timestamp = timestamp - ranges[0].delta; // Account for the delta between timestamps
+    const power = item.map((val: number) => {return Math.round(val / ranges[0].delta)}); // Get the instantaneous val from avg
+    const date = new Date(timestamp * 1000); // Convert timestamp into date
+    list.push({time: date.toLocaleTimeString("en-US"), power: power});
+  }
+  
+  // The API values are from youngest to oldest, so we reverse the list
+  return list.reverse();
+}
+
 // Gets yesterday's total instantaneous energy rates per hour for each URL
 export async function getYesterdaysEnergyTotals(deviceNumber: string, JWT: string) {
     const URL = `https://egauge${deviceNumber}.d.egauge.net/api`
@@ -87,18 +126,17 @@ export async function getYesterdaysEnergyTotals(deviceNumber: string, JWT: strin
     },
     }).then((r) => r.json());
 
-    const res = convertPowerRanges(response.ranges);
+    const res = convertPowerRangesToTotals(response.ranges);
 
     return res;
 }
 
 // Converts power ranges into data that can be plugged into a chart
-// Takes the ranges array from a sensor response, returns array of time-power objects
-export function convertPowerRanges(ranges: Array<any>) : Array<any> {
+// Takes the ranges array from a sensor response, returns array of time-power objects with summing
+export function convertPowerRangesToTotals(ranges: Array<any>) : Array<any> {
   const list = [];
   var timestamp = ranges[0].ts // Get the start timestamp
   const d = new Date(timestamp * 1000);
-  console.log('time start at: ' + d.toLocaleString("en-US"));
 
   for (const item of ranges[0].rows.slice(1)) { // Slicing skips first value, where time isn't a delta and power isn't instantaneous
     timestamp = timestamp - ranges[0].delta; // Account for the delta between timestamps
