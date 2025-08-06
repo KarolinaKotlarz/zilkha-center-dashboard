@@ -1,7 +1,6 @@
 "use client"
 import React, { Suspense, useState } from "react"
 import DeviceList from "@/components/custom/DeviceList";
-import { ProgressBar } from "@/components/ProgressBar";
 import { ExplanationCard } from "@/components/custom/ExplanationCard";
 import { DayTotalsChart } from "@/components/custom/DayTotalsChart";
 import { DevicesChart } from "@/components/custom/DevicesChart";
