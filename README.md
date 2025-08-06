@@ -26,3 +26,6 @@ The components folder contains the custom folder, which has components made for 
 
 The lib folder contains helper files for Tremor Charts.
 
+## Dashboard look
+
+<img width="1406" height="893" alt="Screenshot 2025-08-06 at 16 18 43" src="https://github.com/user-attachments/assets/b6f1d666-131b-4d92-9e64-530698747bc3" />
