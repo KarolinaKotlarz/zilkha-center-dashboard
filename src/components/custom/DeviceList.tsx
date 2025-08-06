@@ -1,7 +1,13 @@
 "use client"
 import { useEffect, useState } from "react";
-import { Checkbox } from "../Checkbox";
 import { Label } from "../Label";
+
+import {
+Accordion,
+AccordionContent,
+AccordionItem,
+AccordionTrigger,
+} from '@/components/Accordion';
 
 export default async function DeviceList() {
     const [devices, setDevices] = useState('[]');
@@ -15,15 +21,26 @@ export default async function DeviceList() {
         }, []);
     return (
         <div>
-            <ul className="ms-1 flex flex-col gap-3">
-                {JSON.parse(devices).map((device: any) => {
-                    return <li className="flex items-center justify-start gap-2">
-                            <Checkbox id="r2" onCheckedChange={() => {}} defaultChecked={false}/>
-                            <Label htmlFor="r2">{device.name}</Label>
-                        </li>
+            <Accordion type="single" className="mx-auto mt-3 max-w-sm" collapsible>
+                {JSON.parse(devices).map((record: any) => {
+                    return <AccordionItem value={record.sensor.number}>
+                    <AccordionTrigger className="font-semibold">{record.sensor.name}</AccordionTrigger>
+                    <AccordionContent>
+                        <ol className="flex flex-col gap-2">
+                            {record.registers.map((register: any) => {
+                                return <li>
+                                    {register.name}
+                                </li>
+                            })}
+                        </ol>
+                    </AccordionContent>
+                    </AccordionItem>
                     }
                 )}
-            </ul>
+            </Accordion>
+            {/* <ul className="ms-1 flex flex-col gap-3">
+                
+            </ul> */}
         </div>
     );
 }

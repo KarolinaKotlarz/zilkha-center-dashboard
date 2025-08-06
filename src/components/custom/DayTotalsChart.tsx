@@ -25,9 +25,8 @@ export function DayTotalsChart() {
   return (
     <>
     <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Total Energy Use</h3>
-    <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold"></p>
     <AreaChart
-        className="mt-4 h-72"
+        className="mt-4 h-75"
         data={data}
         index="time"
         yAxisWidth={65}

@@ -10,10 +10,10 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-screen-2xl">
       <aside className="lg:w-64 lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col flex grow flex-col gap-y-4 overflow-y-auto whitespace-nowrap px-3 py-4">
-          <span className="p-3 text-sx font-semibold text-gray-900">Sensors Available:</span>
+          <span className="p-3 text-sx font-black text-gray-900">Sensors Available:</span>
         <div className="">
           <Suspense fallback={<div>Loading registers...</div>} >
-              {/* <DeviceList/> */}
+              <DeviceList/>
             </Suspense>
       </div>
       </aside>
@@ -22,12 +22,12 @@ export default function Home() {
           <section className="sticky font-bold top-16 z-50 -my-6 flex flex-col gap-6 bg-white py-6 md:flex-row md:flex-wrap md:items-center md:justify-between lg:top-0 dark:bg-gray-925 border-b border-gray-200 transition-all dark:border-gray-900">
             Energy Dashboard
           </section>
-          <section className="my-8 grid grid-cols-3 gap-18">
+          <section className="my-8 grid grid-cols-3 gap-10 items-center">
             <div className="col-span-2">
-              {/* <DayTotalsChart/> */}
+              <DayTotalsChart/>
             </div>
             <div className="flex flex-col">
-              <ProgressBar className="flex-1" value={63} label="63%"/>
+              {/* <ProgressBar className="flex-1" value={63} label="63%"/> */}
               <ExplanationCard/>
             </div>
             <div className="col-span-3">

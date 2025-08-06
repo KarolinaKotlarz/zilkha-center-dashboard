@@ -84,18 +84,12 @@ const valueFormatter = function (number: number | bigint) {
 
 export function DevicesChart() {
     const [d, setData] = useState({data: [{time: '1:00', device: 29 }], names: ['device']});
-        const [sum, setSum] = useState(0);
     
         useEffect(() => {
             async function getData() {
                 const id = '20976'
                 const res = await fetch(`/api/sensor-today?id=${id}`).then((r) => r.json());
-                console.log('done');
-                console.log(res)
-                // const data = await res.json();
                 setData(res);
-                // const cumulativeSum = data.map((val: {time: string, power: number}) => {return val.power}).reduce((partialSum: number, val: number) => partialSum + (val * 3600), 0)
-                // setSum(cumulativeSum);
             }
             getData();
     
@@ -104,14 +98,13 @@ export function DevicesChart() {
   return (
     <>
     <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Devices' Energy Use</h3>
-      <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold"></p>
     <AreaChart
-        className="mt-4 h-72"
+        className="mt-4 h-75"
         data={d.data}
         index="time"
         yAxisWidth={65}
         categories={d.names}
-        colors={['emerald', 'amber', 'pink']}
+        colors={['emerald', 'amber', 'pink', 'fuchsia', 'blue', 'lime', 'cyan', 'violet']}
         valueFormatter={valueFormatter}
       />
     </>
