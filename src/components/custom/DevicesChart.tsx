@@ -1,7 +1,6 @@
 "use client"
 import { AreaChart } from '@/components/AreaChart';
 import { useEffect, useState } from 'react';
-import { Selector } from './Selector';
 
 import {
   Select,
